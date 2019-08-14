@@ -1,0 +1,23 @@
+.scroll-wrap{
+  overflow: hidden;
+  .scroll-box{
+    height: 100%;
+    overflow: visible;
+    box-sizing: border-box;
+    padding: 0 32px;
+    display: inline-block;
+    white-space: nowrap;
+    transition: transform 0.1s ease;
+  }
+
+  .scroll-content{
+    display: inline-block;
+    white-space: nowrap;
+    &>*:first-child{
+      margin-left: 0;
+    }
+    &>*{
+      display: inline;
+    }
+  }
+}
