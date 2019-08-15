@@ -6,7 +6,7 @@ const {
   testRegex,
 } = require('./config.js');
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const getStyleLoaders = (cssOptions = 1, preProcessor) => {
   if (cssOptions >=2 && !preProcessor){
     console.log('请写入preProcessor');
@@ -14,14 +14,14 @@ const getStyleLoaders = (cssOptions = 1, preProcessor) => {
   }
   const loaders = [
     isDev && require.resolve('style-loader'),
-    isPro && {
-      loader: MiniCssExtractPlugin.loader,
-      options: Object.assign({},
-        shouldUseRelativePath ? {
-          publicPath
-        } : undefined,
-      ),
-    },
+    // isPro && {
+    //   loader: MiniCssExtractPlugin.loader,
+    //   options: Object.assign({},
+    //     shouldUseRelativePath ? {
+    //       publicPath
+    //     } : undefined,
+    //   ),
+    // },
     {
       loader: require.resolve('css-loader'),
       options: {

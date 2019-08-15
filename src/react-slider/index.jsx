@@ -1,4 +1,5 @@
 import {
+  createElement,
   useState,
   useRef,
   useEffect,
@@ -6,7 +7,7 @@ import {
   useImperativeHandle,
 } from 'react';
 
-import './slider.scss';
+import './index.scss';
 
 let contentLength = 0;
 let contentWidth = 0;
@@ -25,18 +26,20 @@ let curGroupIndex = 0;
 let moving = false;
 let touchDir = null;   //'row' === 横向滚动  'col' === 竖向滚动
 let moved = false;   //是否移动过，用来区分点击和移动
+const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 
 let Slider = (props, ref) => {
   const {
-    groupLength = 2,
-    clickScroll,
-    crossing,
+    groupLength = 1,  //几个一组
+    clickScroll,  //点击是否自动滚动到当前所在组
+    crossing,    //是否可以跨越翻页
     className,
     children,
   } = props;
 
   const touchDom = useRef(null);
   const contentDom = useRef(null);
+  const wrapDom = useRef(null);
   const [curStyle, setCurStyle] = useState({});
 
   useEffect(() => {
@@ -45,7 +48,7 @@ let Slider = (props, ref) => {
     itemWidth = contentDom.current.firstChild ? contentDom.current.firstChild.clientWidth : 0;
     spaceWidth = (contentWidth - (itemWidth * contentLength)) / (contentLength - 1);
     groupNum = Math.ceil(contentLength / groupLength);
-    maxMove = window.screen.width - touchDom.current.scrollWidth;
+    maxMove = wrapDom.current.clientWidth - touchDom.current.scrollWidth;
     if (contentDom.current.children && contentDom.current.firstChild && groupPosiArr.length === 0) {
       wrapSpaceWidth = contentDom.current.firstChild.offsetLeft;
       for (let i = 0; i < groupNum; i++) {
@@ -76,7 +79,7 @@ let Slider = (props, ref) => {
       pageX,
       pageY,
     } = e.touches[0];
-    if (touchDir === 'row' && Ali.isIOS) {
+    if (touchDir === 'row' && isIOS) {
       e.preventDefault();
     }
     if (touchDir === 'col') return;
@@ -93,9 +96,9 @@ let Slider = (props, ref) => {
     curX <= maxMove && (curX = maxMove);
     setCurStyle({
       'transform': `translate3d(${curX}px, 0, 0)`,
-      '-webkit-transform': `translate3d(${curX}px, 0, 0)`,
+      // '-webkit-transform': `translate3d(${curX}px, 0, 0)`,
       'transition': 'transform 0.02s linear',
-      '-webkit-transition': 'transform 0.02s linear',
+      // '-webkit-transition': 'transform 0.02s linear',
     });
     endX = pageX;
   }
@@ -104,15 +107,15 @@ let Slider = (props, ref) => {
     curX = groupPosiArr[index] <= maxMove ? maxMove : groupPosiArr[index];
     setCurStyle({
       'transform': `translate3d(${curX}px, 0, 0)`,
-      '-webkit-transform': `translate3d(${curX}px, 0, 0)`,
+      // '-webkit-transform': `translate3d(${curX}px, 0, 0)`,
       'transition': 'transform 0.4s ease-in-out',
-      '-webkit-transition': 'transform 0.4s ease-in-out',
+      // '-webkit-transition': 'transform 0.4s ease-in-out',
     });
     temCurX = curX;
     setTimeout(() => {
       setCurStyle({
         'transform': `translate3d(${curX}px, 0, 0)`,
-        '-webkit-transform': `translate3d(${curX}px, 0, 0)`,
+        // '-webkit-transform': `translate3d(${curX}px, 0, 0)`,
       });
       moving = false;
     }, 400);
@@ -163,7 +166,7 @@ let Slider = (props, ref) => {
     };
     moved = false;
     const distance = endX - startX;
-    const scrollDis = itemWidth / 2;  //滑动阀值
+    const scrollDis = itemWidth / 3;  //滑动阀值
     let dir = Math.abs(distance) > scrollDis ? -(distance / Math.abs(distance)) : 0;
     // 是否允许跨越式翻页 例：从第一组直接翻到第三组第四组等
     if (crossing) {
@@ -190,10 +193,14 @@ let Slider = (props, ref) => {
   }));
 
   return (
-    <div className={`${className} scroll-wrap`}>
+    <div className={`${className} scroll-wrap`} ref={wrapDom}>
       <div className="scroll-box" ref={touchDom} onTouchStart={touchStart} onTouchMove={touchMove} onTouchCancel={touchEnd} onTouchEnd={touchEnd} style={curStyle}>
         <div className="scroll-content" ref={contentDom}>
-          {children}
+          {
+            children.map((e, i) => {
+              return <div key={i}>{e}</div>
+            })
+          }
         </div>
       </div>
     </div>

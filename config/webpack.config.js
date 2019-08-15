@@ -14,24 +14,24 @@ const externals = isPro ? {
 
 const entryConfig = (() => {
   let _config = {};
-  const fileList = glob.sync(['./src/*.tsx']);
+  const fileList = glob.sync(['./src/*.tsx']).map(e => '.' + e);
+  console.log(fileList)
   if (fileList && fileList.length > 0){
     for (let i = 0; i < fileList.length; i++){
       if (fileList[i].indexOf('test') > -1){
         continue;
       }
-      _config[fileList[i].match(/([^\/]+)(?=\.)/ig)[0]] = fileList[i];
+      _config[fileList[i].match(/([^\/]+)(?=(\.)[a-z]+)/ig)[0]] = fileList[i];
     }
   }
   return _config;
 })();
-
-console.log(entryConfig)
+console.log(entryConfig);
 const webpackConfig = {
   context: path.resolve(__dirname, './'),
   devtool: false,
   mode: isPro ? 'production' : 'development',
-  entry: isDev ? '../src/index.tsx' : entryConfig,
+  entry: isDev ? '../src/test.tsx' : entryConfig,
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, '../build'),
@@ -43,7 +43,7 @@ const webpackConfig = {
     hot: true,
     open: true,
     publicPath: '/assets/',
-    contentBase: './',
+    // contentBase: './',
   },
   performance: {
     hints: false,

@@ -1,0 +1,35 @@
+*{
+  padding: 0;
+  margin: 0;
+  font-size: 24px;
+}
+
+// react组件外部样式
+.slider{
+  width: 720px;
+  height: 300px;
+  border: 1px solid #f00;
+  box-sizing: content-box;
+  margin: 10px auto;
+  .item{
+    width: 720px;
+    height: 299px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    color: #fff;
+  }
+  .item1{
+    background-color: #ccc;
+  }
+  .item2{
+    background-color: aquamarine;
+  }
+  .item3{
+    background-color: #f00;
+  }
+  .item4{
+    background-color: #000;
+  }
+}
