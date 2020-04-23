@@ -1,5 +1,5 @@
 // 兼容移动端方案
-import setRem from '@/common/rem.js';
+import setRem from '@/common/rem';
 setRem(750, 100);
 import './test.scss';
 

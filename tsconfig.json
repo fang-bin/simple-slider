@@ -9,6 +9,7 @@
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react",
+    "jsxFactory": "React.createElement",
     "moduleResolution": "node",
     // "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
@@ -18,7 +19,13 @@
     "importHelpers": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@js-slider/*": ["./src/js-slider/*"],
+      "@react-slider": ["./src/react-slider/*"],
+      "@vue-slider": ["./src/vue-slider/*"]
+    }
   },
   "exclude": [
     "node_modules",
